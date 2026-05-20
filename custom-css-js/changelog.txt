@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 3.53 =
+* 05/20/2026
+* Fix: the "list_table_primary_column" filter should affect only the Custom Code table 
+
 = 3.52 =
 * 03/06/2026
 * Fix: don't load block_css.css or block_js.js on the frontend 

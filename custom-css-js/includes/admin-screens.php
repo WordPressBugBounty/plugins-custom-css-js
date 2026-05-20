@@ -374,8 +374,8 @@ class CustomCSSandJS_Admin {
 	/**
 	 * Set list table primary column.
 	 */
-	function list_table_primary_column() {
-		return 'name';
+	function list_table_primary_column( $default, $screen ) {
+		return ( $screen === 'edit-custom-css-js' ) ? 'name' : $default;
 	}
 
 
