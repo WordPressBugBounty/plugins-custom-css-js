@@ -5,7 +5,7 @@ Email: diana@burduja.eu
 Tags: custom CSS, custom JS, site css, add style, customize theme 
 Requires at least: 4.2
 Tested up to: 7.1 
-Stable tag: 3.54
+Stable tag: 3.54.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 5.2.4
@@ -101,6 +101,12 @@ The URL for the linked Codes is built just like the URL for other media (from Me
 4. Add/Edit HTML 
 
 == Changelog ==
+
+
+= 3.54.1 =
+* 10/03/2026
+* Tweak: add translators' notes to translatable strings
+* Fix: escape outputs as per the WordPress documentation.
 
 = 3.54 =
 * 08/20/2026
