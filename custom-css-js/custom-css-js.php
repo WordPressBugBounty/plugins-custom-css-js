@@ -3,7 +3,7 @@
  * Plugin Name: Simple Custom CSS and JS
  * Plugin URI:  https://wordpress.org/plugins/custom-css-js/
  * Description: Easily add Custom CSS or JS to your website with an awesome editor.
- * Version:     3.54.1
+ * Version:     3.54.2
  * Author:      SilkyPress.com
  * Author URI:  https://www.silkypress.com
  * License:     GPLv3
@@ -201,12 +201,12 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 					}
 				}
 
-				if ( 'external' === $where && 'js' === $type ) : ?><script<?php echo esc_html( $type_attr ); ?> src="<?php echo esc_url( $upload_url . $_filename ); ?>"></script>
+				if ( 'external' === $where && 'js' === $type ) : ?><script<?php echo $type_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> src="<?php echo esc_url( $upload_url . $_filename ); ?>"></script>
 <?php endif;
 
 				if ( 'external' === $where && 'css' === $type ) :
 					$shortfilename = preg_replace( '@\.css\?v=.*$@', '', $_filename );
-					?><link rel="stylesheet" id="<?php echo esc_attr( $shortfilename ); ?>-css" href="<?php echo esc_url( $upload_url . $_filename ); ?>"<?php echo esc_html( $type_attr ); ?> media="all" />
+					?><link rel="stylesheet" id="<?php echo esc_attr( $shortfilename ); ?>-css" href="<?php echo esc_url( $upload_url . $_filename ); ?>"<?php echo $type_attr // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped; ?> media="all" />
 <?php endif;
 
 				if ( 'html' === $type ) {
@@ -283,7 +283,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		public function set_constants() {
 			$dir       = wp_upload_dir();
 			$constants = array(
-				'CCJ_VERSION'     => '3.54.1',
+				'CCJ_VERSION'     => '3.54.2',
 				'CCJ_UPLOAD_DIR'  => $dir['basedir'] . '/custom-css-js',
 				'CCJ_UPLOAD_URL'  => $dir['baseurl'] . '/custom-css-js',
 				'CCJ_PLUGIN_FILE' => __FILE__,
