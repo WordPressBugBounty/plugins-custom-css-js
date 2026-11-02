@@ -186,7 +186,7 @@ class CustomCSSandJS_Notices {
             </script>
 
                 <div id="<?php echo esc_attr( $p ); ?>_notice" class="updated notice <?php echo esc_attr( $p ); ?>_notice is-dismissible" data-nonce="<?php echo  esc_attr( wp_create_nonce( $this->prefix .'_notice') ); ?>">
-            <p><?php echo $message // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ; ?></p>
+            <p><?php echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 			<span>
             <button type="button" class="notice-dismiss dismiss_notice">
             <span class="screen-reader-text"><?php esc_html_e('Dismiss this notice', 'custom-css-js'); ?></span>

@@ -3,7 +3,7 @@
  * Plugin Name: Simple Custom CSS and JS
  * Plugin URI:  https://wordpress.org/plugins/custom-css-js/
  * Description: Easily add Custom CSS or JS to your website with an awesome editor.
- * Version:     3.54.3
+ * Version:     3.55
  * Author:      SilkyPress.com
  * Author URI:  https://www.silkypress.com
  * License:     GPLv3
@@ -100,7 +100,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 					add_action( 'wp_enqueue_scripts', 'CustomCSSandJS::wp_enqueue_scripts' );
 				}
 
-				add_action( 'enqueue_block_editor_assets', 'CustomCSSandJS::enqueue_block_editor_assets' );
+				add_action( 'enqueue_block_assets', 'CustomCSSandJS::enqueue_block_assets' );
 			}
 		}
 
@@ -201,13 +201,18 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 					}
 				}
 
-				if ( 'external' === $where && 'js' === $type ) : ?><script<?php echo $type_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> src="<?php echo esc_url( $upload_url . $_filename ); ?>"></script>
-<?php endif;
+				if ( 'external' === $where && 'js' === $type ) :
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					?><script<?php echo $type_attr; ?> src="<?php echo esc_url( $upload_url . $_filename ); ?>"></script>
+<?php
+				endif;
 
 				if ( 'external' === $where && 'css' === $type ) :
 					$shortfilename = preg_replace( '@\.css\?v=.*$@', '', $_filename );
-					?><link rel="stylesheet" id="<?php echo esc_attr( $shortfilename ); ?>-css" href="<?php echo esc_url( $upload_url . $_filename ); ?>"<?php echo $type_attr // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped; ?> media="all" />
-<?php endif;
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					?><link rel="stylesheet" id="<?php echo esc_attr( $shortfilename ); ?>-css" href="<?php echo esc_url( $upload_url . $_filename ); ?>"<?php echo $type_attr; ?> media="all" />
+<?php
+				endif;
 
 				if ( 'html' === $type ) {
 					$post = get_post( intval( $_filename ) );
@@ -231,7 +236,11 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		/**
 		 * Load the CSS/JS custom codes to the Block editor.
 		 */
-		public static function enqueue_block_editor_assets() {
+		public static function enqueue_block_assets() {
+
+			if ( ! is_admin() ) {
+				return;
+			}
 
 			$search_tree = get_option( 'custom-css-js-tree', array() );
 
@@ -245,7 +254,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 				// Load external CSS custom codes.
 				if ( strpos( $_where, 'css' ) !== false ) {
 					foreach ( $_files as $__file ) {
-						wp_enqueue_style( $__file, CCJ_UPLOAD_URL . '/' . $__file, [], null );
+						wp_enqueue_style( $__file, CCJ_UPLOAD_URL . '/' . $__file, [], wp_rand() );
 					}
 				} 
 
@@ -256,7 +265,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 						$args['in_footer'] = true;
 					}
 					foreach ( $_files as $__file ) {
-						wp_enqueue_script( $__file, CCJ_UPLOAD_URL . '/' . $__file, $js_dependency, null, $args );
+						wp_enqueue_script( $__file, CCJ_UPLOAD_URL . '/' . $__file, $js_dependency, wp_rand(), $args );
 					}
 				}
 			}
@@ -283,7 +292,7 @@ if ( ! class_exists( 'CustomCSSandJS' ) ) :
 		public function set_constants() {
 			$dir       = wp_upload_dir();
 			$constants = array(
-				'CCJ_VERSION'     => '3.54.3',
+				'CCJ_VERSION'     => '3.55',
 				'CCJ_UPLOAD_DIR'  => $dir['basedir'] . '/custom-css-js',
 				'CCJ_UPLOAD_URL'  => $dir['baseurl'] . '/custom-css-js',
 				'CCJ_PLUGIN_FILE' => __FILE__,

@@ -5,7 +5,7 @@ Email: diana@burduja.eu
 Tags: custom CSS, custom JS, site css, add style, customize theme 
 Requires at least: 4.2
 Tested up to: 7.1 
-Stable tag: 3.54.3
+Stable tag: 3.55
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 5.2.4
@@ -101,6 +101,12 @@ The URL for the linked Codes is built just like the URL for other media (from Me
 4. Add/Edit HTML 
 
 == Changelog ==
+
+= 3.55 =
+* 11/02/2026
+* Fix: https://wordpress.org/support/topic/css-doesnt-work-in-block-editor/#post-19043639 
+* Change: replace the direct database query with a WP_Query implementation
+* Tweak: add version number to some enqueued assets for cache purposes
 
 = 3.54.3 =
 * 10/08/2026

@@ -224,7 +224,7 @@ class CustomCSSandJS_Admin {
 				}
 			}
 			// remove the CodeMirror library added by the Product Slider for WooCommerce plugin by ShapedPlugin
-			wp_enqueue_style( 'spwps-codemirror', $a . '/empty.css', '1.0' );
+			wp_enqueue_style( 'spwps-codemirror', $a . '/empty.css', array(), '1.0' );
 			wp_enqueue_script( 'spwps-codemirror', $a . '/empty.js', array(), '1.0', true );
 		}
 	}
@@ -416,7 +416,7 @@ class CustomCSSandJS_Admin {
 					/* translators: %s: Human-readable time difference. */
 					$h_time = sprintf( __( '%s ago', 'custom-css-js' ), human_time_diff( $time ) );
 				} else {
-					$h_time = ( 'published' === $column ) ? get_the_time( __( 'Y/m/d' ), $post ) : get_the_modified_time( __( 'Y/m/d' ), $post );
+					$h_time = ( 'published' === $column ) ? get_the_time( 'Y/m/d', $post ) : get_the_modified_time( 'Y/m/d', $post );
 				}
 			}
 
@@ -458,7 +458,7 @@ class CustomCSSandJS_Admin {
 	 * List table: Change the query in order to filter by code type
 	 */
 	function parse_query( $query ) {
-		global $wpdb;
+
 		if ( ! is_admin() || ! $query->is_main_query() ) {
 			return $query;
 		}
@@ -475,14 +475,16 @@ class CustomCSSandJS_Admin {
 		if ( ! is_string( $filter ) || strlen( $filter ) == 0 ) {
 			return $query;
 		}
-		$filter = '%' . $wpdb->esc_like( $filter ) . '%';
 
-		$post_id_query = "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value LIKE %s";
-		$post_ids      = $wpdb->get_col( $wpdb->prepare( $post_id_query, 'options', $filter ) );
-		if ( ! is_array( $post_ids ) || count( $post_ids ) == 0 ) {
-			$post_ids = array( -1 );
-		}
-		$query->query_vars['post__in'] = $post_ids;
+		$meta_query = [
+			[
+				'key'     => 'options',
+				'value'   => $filter,
+				'compare' => 'LIKE',
+			],
+		];
+
+		$query->set('meta_query', $meta_query);
 
 		return $query;
 	}
@@ -647,6 +649,7 @@ class CustomCSSandJS_Admin {
 		$this->remove_unallowed_metaboxes();
 
 		$post_id  = ( isset( $_GET['post'] ) ) ? esc_attr( $_GET['post'] ) : false;
+		/* translators: 1: programming language. */
 		$action   = ( isset( $_GET['post'] ) ) ? __( 'Edit %s code', 'custom-css-js' ) : __( 'Add %s code', 'custom-css-js' ); 
 		$language = $this->get_language( $post_id );
 
